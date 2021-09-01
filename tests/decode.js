@@ -11,12 +11,8 @@ async function test( assert, ext ) {
 
 export default {
 
-    decode: {
-
-        'Should decode blob(jpeg)->imageData.': async assert => test( assert, 'jpg' ),
-        'Should decode blob(png)->imageData.': async assert => test( assert, 'png' ),
-        'Should decode blob(gif)->imageData.': async assert => test( assert, 'gif' ),
-
-    },
+    'Should decode blob(jpeg)->imageData.': async assert => test( assert, 'jpg' ),
+    'Should decode blob(png)->imageData.': async assert => test( assert, 'png' ),
+    'Should decode blob(gif)->imageData.': async assert => test( assert, 'gif' ),
 
 };

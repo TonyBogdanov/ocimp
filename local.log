@@ -1,0 +1,13 @@
+"" 
+
+
+Thu Sep 02 2021 00:27:07 GMT+0300 (GMT+03:00) -- [ERROR] Another instance of BrowserStack Binary is running with on your system with PID: 9484
+Thu Sep 02 2021 00:27:07 GMT+0300 (GMT+03:00) -- [ERROR] Please close it and try again
+Thu Sep 02 2021 00:27:07 GMT+0300 (GMT+03:00) -- [ERROR] SYS_CONFLICT:1001 https://browserstack.com/docs/local-testing/binary/errors/1001
+Thu Sep 02 2021 00:27:07 GMT+0300 (GMT+03:00) -- You can learn more about BrowserStack Binary flags by running BrowserStackLocal.exe --help
+Thu Sep 02 2021 00:27:08 GMT+0300 (GMT+03:00) -- [INFO] Started the BrowserStack Binary server on 45691, PID: 9484
+Thu Sep 02 2021 00:27:08 GMT+0300 (GMT+03:00) -- [SUCCESS] You can now access your local server(s) in our remote browser
+
+Thu Sep 02 2021 00:27:08 GMT+0300 (GMT+03:00) -- Press Ctrl-C to exit
+
+

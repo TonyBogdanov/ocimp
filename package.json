@@ -6,11 +6,10 @@
   "repository": "https://github.com/tonybogdanov/ocimp",
   "author": "",
   "license": "ISC",
-  "browserslist": [
-    "last 5 years"
-  ],
+  "browserslist": [ ">1%" ],
   "scripts": {
-    "webpack": "webpack serve --progress --mode=development"
+    "webpack": "webpack serve --progress --mode=development",
+    "test": "node ./test.js"
   },
   "dependencies": {
     "jimp": "^0.16.1"
@@ -19,13 +18,19 @@
     "@babel/core": "^7.15.0",
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
+    "@supercharge/promise-pool": "^1.7.0",
     "babel-loader": "^8.2.2",
     "browserslist": "^4.16.8",
+    "browserslist-browserstack": "^3.1.1",
+    "browserstack-local": "^1.4.8",
+    "compare-versions": "^3.6.0",
     "html-webpack-plugin": "^5.3.2",
     "mocha": "^9.1.1",
+    "selenium-webdriver": "^4.0.0-rc-1",
+    "tree-kill": "^1.2.2",
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.0.0",
+    "webpack-dev-server": "^4.1.0",
     "worker-loader": "^3.0.8"
   }
 }

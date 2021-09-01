@@ -14,11 +14,7 @@ async function test( assert, ext, mime ) {
 
 export default {
 
-    encode: {
-
-        'Should encode imageData->blob(jpeg).': async assert => test( assert, 'jpg', 'image/jpeg' ),
-        'Should encode imageData->blob(png).': async assert => test( assert, 'png', 'image/png' ),
-
-    },
+    'Should encode imageData->blob(jpeg).': async assert => test( assert, 'jpg', 'image/jpeg' ),
+    'Should encode imageData->blob(png).': async assert => test( assert, 'png', 'image/png' ),
 
 };

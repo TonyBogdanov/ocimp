@@ -33,21 +33,17 @@ module.exports = {
 
     devServer: {
 
-        host: 'upmaas.maga.re',
-        allowedHosts: [ 'upmaas.maga.re' ],
+        host: 'localhost',
+        allowedHosts: [ 'localhost' ],
 
-        port: 9000,
+        port: 9090,
         headers: { 'Access-Control-Allow-Origin': '*' },
 
         hot: false,
         liveReload: true,
 
         compress: true,
-        static: {
-
-            directory: path.resolve( __dirname, 'static' ),
-
-        },
+        static: { directory: path.resolve( __dirname, 'static' ) },
 
         historyApiFallback: true,
         https: false,

@@ -1,4 +1,5 @@
 const path = require( 'path' );
+const webpack = require( 'webpack' );
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 
 module.exports = {
@@ -7,7 +8,12 @@ module.exports = {
     entry: './web/index.js',
 
     output: { path: path.resolve( __dirname, 'dist' ), publicPath: '/', filename: '[name].js' },
-    plugins: [ new HtmlWebpackPlugin( { template: './web/index.html' } ) ],
+    plugins: [
+
+        new HtmlWebpackPlugin( { template: './web/index.html' } ),
+        new webpack.ProvidePlugin( { Buffer: [ 'buffer', 'Buffer' ], process: 'process/browser' } ),
+
+    ],
 
     module: { rules: [ {
 

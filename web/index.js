@@ -48,4 +48,16 @@ document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
 
     mocha.run();
 
+    // const b = await ( await fetch( '/a.png' ) ).blob();
+    // let i = await run( 'decode', b );
+    //
+    // for ( const v of [ 'left', 'center', 'right' ] ) {
+    //
+    //     const r = await run( 'encode', await run( 'cover', i, 5, 25, v, 'middle' ) );
+    //     const img = document.createElement( 'img' );
+    //     img.src = URL.createObjectURL( r );
+    //     document.body.appendChild( img );
+    //
+    // }
+
 }, 500 ) );

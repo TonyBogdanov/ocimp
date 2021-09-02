@@ -3,7 +3,6 @@ const kill = require( 'tree-kill' );
 const browserstack = require( 'browserstack-local' );
 const webdriver = require( 'selenium-webdriver' );
 const pool = require( '@supercharge/promise-pool' );
-const version = require( 'compare-versions' );
 const getCapabilities = require( 'browserslist-browserstack' ).default;
 
 async function capabilities() {
@@ -19,14 +18,10 @@ async function capabilities() {
     const candidates = {};
     for ( const cap of caps ) {
 
-        if (
+        const key = `${ cap.browserName }@${ cap.browserVersion }`;
+        if ( ! candidates.hasOwnProperty( key ) ) {
 
-            ! candidates.hasOwnProperty( cap.browserName ) ||
-            0 < version( candidates[ cap.browserName ].browserVersion, cap.browserVersion )
-
-        ) {
-
-            candidates[ cap.browserName ] = cap;
+            candidates[ key ] = cap;
 
         }
 
@@ -138,8 +133,8 @@ async function wd( caps, callback ) {
                 await d.get( 'http://localhost:9090' );
                 const { ok, stats } = await d.executeAsyncScript( 'window.$selenium=arguments[arguments.length-1]' );
 
-                await d.executeScript( `browserstack_executor:{"action":"setSessionStatus","arguments":{"status":"${
-                    ok ? 'passed' : 'failed' }"}}` );
+                await d.executeScript( `browserstack_executor:${ JSON.stringify( { action: 'setSessionStatus',
+                        arguments: { status: ok ? 'passed' : 'failed' } } ) }` );
 
                 console.log( `  ${ caps.browserName }@${ caps.browserVersion }: ${ ok ?
                     'All tests succeeded.' : 'Some tests failed.' }\n` );
@@ -156,6 +151,7 @@ async function wd( caps, callback ) {
                 }
 
                 console.log( '' );
+                await new Promise( resolve => setTimeout( resolve, 1000 ) );
 
             }
         ) ) ).process( async c => c() ) ) );

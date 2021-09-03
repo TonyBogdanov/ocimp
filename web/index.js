@@ -1,6 +1,5 @@
 import register from '../src/register';
 
-window.$selenium = null;
 document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
 
     register();
@@ -17,10 +16,26 @@ document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
 
     }
 
-    if ( $selenium ) {
+    if ( 'function' === typeof $selenium ) {
 
         const results = { ok: true, stats: {} };
+        const report = document.createElement( 'ul' );
+
+        report.id = 'mocha-report';
+        document.getElementById( 'mocha' ).appendChild( report );
+
         for ( const [ group, tests ] of Object.entries( suite ) ) {
+
+            const suite = document.createElement( 'li' );
+            const h1 = document.createElement( 'h1' );
+            const ul = document.createElement( 'ul' );
+
+            suite.classList.add( 'suite' );
+            report.appendChild( suite );
+
+            h1.textContent = group;
+            suite.appendChild( h1 );
+            suite.appendChild( ul );
 
             results.stats[ group ] = [];
             for ( const [ name, run ] of Object.entries( tests ) ) {
@@ -30,6 +45,16 @@ document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
 
                 error ? results.ok = false : 0;
                 results.stats[ group ].push( error ? error : `✓ ${ name } [${ new Date().getTime() - start }ms]` );
+
+                const li = document.createElement( 'li' );
+                const h2 = document.createElement( 'h2' );
+
+                li.classList.add( 'test' );
+                li.classList.add( 'pass' );
+                h2.textContent = results.stats[ group ][ results.stats[ group ].length - 1 ].substr( 2 );
+
+                li.appendChild( h2 );
+                suite.appendChild( li );
 
             }
 
@@ -47,17 +72,5 @@ document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
             it( name, async () => run( chai.assert ) ).timeout( 10000 ) ) ) );
 
     mocha.run();
-
-    // const b = await ( await fetch( '/a.png' ) ).blob();
-    // let i = await run( 'decode', b );
-    //
-    // for ( const v of [ 'left', 'center', 'right' ] ) {
-    //
-    //     const r = await run( 'encode', await run( 'cover', i, 5, 25, v, 'middle' ) );
-    //     const img = document.createElement( 'img' );
-    //     img.src = URL.createObjectURL( r );
-    //     document.body.appendChild( img );
-    //
-    // }
 
 }, 500 ) );

@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 module.exports = {
 
     devtool: false,
-    entry: './web/index.js',
+    entry: [ 'core-js/stable', './web/index.js' ],
 
     output: { path: path.resolve( __dirname, 'dist' ), publicPath: '/', filename: '[name].js' },
     plugins: [
@@ -29,7 +29,7 @@ module.exports = {
             options: {
 
                 presets: [ '@babel/preset-env' ],
-                plugins: [ '@babel/plugin-transform-runtime' ],
+                plugins: [ '@babel/plugin-transform-runtime', '@babel/plugin-transform-modules-commonjs' ],
 
             },
 

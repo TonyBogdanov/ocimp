@@ -1,16 +1,19 @@
 {
   "name": "ocimp",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Off-Canvas Image Processing",
   "main": "package.json",
-  "repository": "https://github.com/tonybogdanov/ocimp",
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tonybogdanov/ocimp.git"
+  },
+  "author": "Tony Bogdanov <support@tonybogdanov.com>",
+  "license": "MIT",
   "browserslist": [
     ">1%"
   ],
   "scripts": {
-    "webpack": "webpack serve --progress --mode=development",
+    "webpack": "webpack serve --progress --mode=development --stats-children",
     "test": "node ./test.js"
   },
   "dependencies": {
@@ -35,5 +38,12 @@
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.1.0",
     "worker-loader": "^3.0.8"
+  },
+  "bugs": {
+    "url": "https://github.com/tonybogdanov/ocimp/issues"
+  },
+  "homepage": "https://github.com/tonybogdanov/ocimp#readme",
+  "directories": {
+    "test": "tests"
   }
 }

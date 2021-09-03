@@ -4,17 +4,21 @@ import log from './log';
 import load from './load';
 import listen from './listen';
 
-/* debug:start */
-if ( is.frontend ) {
+if ( ! singleton.handle ) {
 
-    throw `Cannot register the backend in a frontend environment.`;
+    /* debug:start */
+    if ( is.frontend ) {
+
+        throw `Cannot register the backend in a frontend environment.`;
+
+    }
+
+    log( 'Registering %s.', is.what );
+    /* debug:stop */
+
+    singleton.handle = self;
+
+    load();
+    listen();
 
 }
-
-log( 'Registering %s.', is.what );
-/* debug:stop */
-
-singleton.handle = self;
-
-load();
-listen();

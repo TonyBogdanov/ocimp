@@ -8,6 +8,12 @@ import listen from './listen';
 
 export default function register() {
 
+    if ( singleton.handle ) {
+
+        return;
+
+    }
+
     /* debug:start */
     if ( is.backend ) {
 

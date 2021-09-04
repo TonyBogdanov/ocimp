@@ -45,7 +45,8 @@ document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
                 try { await run( chai.assert ) } catch ( e ) { error = e }
 
                 error ? results.ok = false : 0;
-                results.stats[ group ].push( error ? error : `✓ ${ name } [${ new Date().getTime() - start }ms]` );
+                results.stats[ group ].push( error ? `X ${ error }` :
+                    `✓ ${ name } [${ new Date().getTime() - start }ms]` );
 
                 const li = document.createElement( 'li' );
                 const h2 = document.createElement( 'h2' );
@@ -70,7 +71,7 @@ document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
 
     Object.entries( suite ).forEach( ( [ group, tests ] ) =>
         describe( group, () => Object.entries( tests ).forEach( ( [ name, run ] ) =>
-            it( name, async () => run( chai.assert ) ).timeout( 10000 ) ) ) );
+            it( name, async () => run( chai.assert ) ).timeout( 60000 ) ) ) );
 
     mocha.run();
 

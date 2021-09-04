@@ -1,14 +1,12 @@
 const { spawn } = require( 'child_process' );
+const path = require( 'path' );
 const kill = require( 'tree-kill' );
 const browserstack = require( 'browserstack-local' );
 const webdriver = require( 'selenium-webdriver' );
+const compare = require( 'compare-versions' );
+const copy = require( 'recursive-copy' );
+const rimraf = require( 'rimraf' );
 const getCapabilities = require( 'browserslist-browserstack' ).default;
-
-function sleep( ms ) {
-
-    return new Promise( resolve => setTimeout( resolve, ms ) );
-
-}
 
 function batch( queue ) {
 
@@ -45,7 +43,7 @@ function batch( queue ) {
             active++;
             queue.shift()()
                 .then( result => results.push( result ) )
-                .catch( e => error = error ?? e )
+                .catch( e => { error = error ?? e; queue = []; } )
                 .finally( () => { active--; go(); } );
 
             go();
@@ -68,19 +66,27 @@ async function capabilities() {
 
     } );
 
-    const candidates = {};
+    const candidates = { min: {}, max: {} };
     for ( const cap of caps ) {
 
-        const key = `${ cap.browserName }@${ cap.browserVersion }`;
-        if ( ! candidates.hasOwnProperty( key ) ) {
+        if ( ! candidates.min.hasOwnProperty( cap.browserName ) ||
+            0 < compare( candidates.min[ cap.browserName ].browserVersion, cap.browserVersion ) ) {
 
-            candidates[ key ] = cap;
+            candidates.min[ cap.browserName ] = cap;
+
+        }
+
+        if ( ! candidates.max.hasOwnProperty( cap.browserName ) ||
+            0 > compare( candidates.max[ cap.browserName ].browserVersion, cap.browserVersion ) ) {
+
+            candidates.max[ cap.browserName ] = cap;
 
         }
 
     }
 
-    return Object.values( candidates );
+    return Object.values( candidates.min ).concat( Object.values( candidates.max ) )
+        .filter( ( v, i, a ) => a.indexOf( v ) === i );
 
 }
 
@@ -93,17 +99,31 @@ async function invoke( callback ) {
 
 }
 
-async function wp( callback ) {
+async function build() {
 
-    console.debug( 'Starting webpack.' );
+    console.debug( 'Webpack building.' );
+    return new Promise( async ( resolve, reject ) => {
+
+        const p = spawn( 'win32' === process.platform ? 'npm.cmd' : 'npm', [ 'run', 'build' ], { cwd: __dirname } );
+        p.on( 'close', e => 0 < e ? reject() : resolve() );
+
+    } );
+
+}
+
+async function ws( callback ) {
+
+    console.debug( 'Starting web-server.' );
     return new Promise( async ( resolve, reject ) => {
 
         let started = false, stderr = '', result = undefined, error = undefined;
 
-        const p = spawn( 'win32' === process.platform ? 'npm.cmd' : 'npm', [ 'run', 'webpack' ], { cwd: __dirname } );
+        const p = spawn( 'win32' === process.platform ? 'npx.cmd' : 'npx', [ 'http-server' ], {
+            cwd: path.resolve( __dirname, 'dist' ) } );
+
         const g = async data => {
 
-            if ( started || -1 === data.indexOf( 'compiled' ) || -1 === data.indexOf( 'successfully' ) ) {
+            if ( started || -1 === data.indexOf( 'to stop the server' ) ) {
 
                 return;
 
@@ -112,7 +132,7 @@ async function wp( callback ) {
             started = true;
             [ result, error ] = await invoke( callback );
 
-            console.debug( 'Stopping webpack.' );
+            console.debug( 'Stopping web-server.' );
             kill( p.pid );
 
         };
@@ -194,12 +214,17 @@ async function wd( caps, callback ) {
 
     try {
 
-        await wp( () => bs( async () => {
+        rimraf.sync( path.resolve( __dirname, 'dist' ) );
+
+        await copy( path.resolve( __dirname, 'static' ), path.resolve( __dirname, 'dist' ) );
+        await build();
+
+        await ws( () => bs( async () => {
 
             await batch( ( await capabilities() ).map( cap => async () => await wd( cap, async driver => {
 
                 await driver.manage().setTimeouts( { script: 60000, pageLoad: 60000, implicit: 60000 } );
-                await driver.get( 'http://localhost:9090' );
+                await driver.get( 'http://localhost:8080' );
 
                 const { ok, stats } = await driver.executeAsyncScript(
                     'window.$selenium=arguments[arguments.length-1]' );
@@ -220,6 +245,12 @@ async function wd( caps, callback ) {
                 }
 
                 console.log( '' );
+
+                if ( ! ok ) {
+
+                    throw 'Tests failed.';
+
+                }
 
             } ) ) );
 

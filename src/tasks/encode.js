@@ -47,6 +47,6 @@ export default async ( imageData, type = 'image/png', quality = 0.8 ) => {
 
     }
 
-    return new Blob( new Uint8Array( array ), { type } );
+    return new Blob( [ new Uint8Array( array ) ], { type } );
 
 };

@@ -4,6 +4,60 @@ const browserstack = require( 'browserstack-local' );
 const webdriver = require( 'selenium-webdriver' );
 const getCapabilities = require( 'browserslist-browserstack' ).default;
 
+function sleep( ms ) {
+
+    return new Promise( resolve => setTimeout( resolve, ms ) );
+
+}
+
+function batch( queue ) {
+
+    return new Promise( ( resolve, reject ) => {
+
+        let active = 0,
+            finished = false,
+            results = [],
+            error = undefined;
+
+        const go = () => {
+
+            if ( 5 <= active ) {
+
+                return;
+
+            }
+
+            if ( 0 === queue.length ) {
+
+                if ( finished || 0 < active ) {
+
+                    return;
+
+                }
+
+                finished = true;
+                'undefined' !== typeof error ? reject( error ) : resolve( results );
+
+                return;
+
+            }
+
+            active++;
+            queue.shift()()
+                .then( result => results.push( result ) )
+                .catch( e => error = error ?? e )
+                .finally( () => { active--; go(); } );
+
+            go();
+
+        };
+
+        go();
+
+    } );
+
+}
+
 async function capabilities() {
 
     console.log( 'Resolving browser capabilities.' );
@@ -142,36 +196,32 @@ async function wd( caps, callback ) {
 
         await wp( () => bs( async () => {
 
-            for ( const cap of await capabilities() ) {
+            await batch( ( await capabilities() ).map( cap => async () => await wd( cap, async driver => {
 
-                await wd( cap, async driver => {
+                await driver.manage().setTimeouts( { script: 60000, pageLoad: 60000, implicit: 60000 } );
+                await driver.get( 'http://localhost:9090' );
 
-                    await driver.manage().setTimeouts( { script: 60000, pageLoad: 60000, implicit: 60000 } );
-                    await driver.get( 'http://localhost:9090' );
+                const { ok, stats } = await driver.executeAsyncScript(
+                    'window.$selenium=arguments[arguments.length-1]' );
 
-                    const { ok, stats } = await driver.executeAsyncScript(
-                        'window.$selenium=arguments[arguments.length-1]' );
+                await driver.executeScript( `browserstack_executor:${ JSON.stringify( { action: 'setSessionStatus',
+                    arguments: { status: ok ? 'passed' : 'failed' } } ) }` );
 
-                    await driver.executeScript( `browserstack_executor:${ JSON.stringify( { action: 'setSessionStatus',
-                        arguments: { status: ok ? 'passed' : 'failed' } } ) }` );
+                console.log( `  ${ cap.browserName }@${ cap.browserVersion }: ${ ok ? 'SUCCESS' : 'FAILURE' }\n` );
+                for ( const [ group, results ] of Object.entries( stats ) ) {
 
-                    console.log( `  ${ cap.browserName }@${ cap.browserVersion }: ${ ok ? 'SUCCESS' : 'FAILURE' }\n` );
-                    for ( const [ group, results ] of Object.entries( stats ) ) {
+                    console.log( `    ${ group }` );
+                    for ( const line of results ) {
 
-                        console.log( `    ${ group }` );
-                        for ( const line of results ) {
-
-                            console.log( `      ${ line }` );
-
-                        }
+                        console.log( `      ${ line }` );
 
                     }
 
-                    console.log( '' );
+                }
 
-                } );
+                console.log( '' );
 
-            }
+            } ) ) );
 
         } ) );
 

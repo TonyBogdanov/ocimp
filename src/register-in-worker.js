@@ -4,7 +4,7 @@ import log from './log';
 import load from './load';
 import listen from './listen';
 
-export default function register( worker ) {
+export default function registerInWorker() {
 
     if ( singleton.registered ) {
 
@@ -13,9 +13,9 @@ export default function register( worker ) {
     }
 
     /* debug:start */
-    if ( is.backend ) {
+    if ( is.frontend ) {
 
-        throw `Cannot register the frontend in a backend environment.`;
+        throw `Cannot register the backend in a frontend environment.`;
 
     }
 
@@ -23,9 +23,9 @@ export default function register( worker ) {
     /* debug:stop */
 
     singleton.registered = true;
-    singleton.handle = worker;
+    singleton.handle = self;
 
     load();
     listen();
 
-};
+}

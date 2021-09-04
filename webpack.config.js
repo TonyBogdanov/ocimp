@@ -15,27 +15,36 @@ module.exports = {
 
     ],
 
-    module: { rules: [ {
+    module: {
 
-        test: /worker\.js$/,
-        use: { loader: 'worker-loader' },
+        rules: [
 
-    }, {
+            {
 
-        test: /\.js$/,
-        use: {
+                test: /[\/\\]worker\.js$/,
+                use: { loader: 'worker-loader' },
 
-            loader: 'babel-loader',
-            options: {
+            },
+            {
 
-                presets: [ '@babel/preset-env' ],
-                plugins: [ '@babel/plugin-transform-runtime', '@babel/plugin-transform-modules-commonjs' ],
+                test: /\.js$/,
+                use: {
+
+                    loader: 'babel-loader',
+                    options: {
+
+                        presets: [ '@babel/preset-env' ],
+                        plugins: [ '@babel/plugin-transform-runtime', '@babel/plugin-transform-modules-commonjs' ],
+
+                    },
+
+                },
 
             },
 
-        },
+        ],
 
-    } ] },
+    },
 
     devServer: {
 

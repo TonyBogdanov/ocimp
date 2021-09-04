@@ -1,8 +1,9 @@
+import Worker from '../src/worker';
 import register from '../src/register';
 
 document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
 
-    register();
+    register( new Worker() );
 
     const suite = {};
     const context = require.context( '../tests', true, /\.js$/, 'lazy' );

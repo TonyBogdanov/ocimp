@@ -10,7 +10,7 @@
   "author": "Tony Bogdanov <support@tonybogdanov.com>",
   "license": "MIT",
   "browserslist": [
-    ">1%"
+    "since 2017"
   ],
   "scripts": {
     "webpack": "webpack serve --progress --mode=development --stats-children",

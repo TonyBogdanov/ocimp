@@ -1,8 +1,8 @@
 {
   "name": "ocimp",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Off-Canvas Image Processing",
-  "main": "package.json",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tonybogdanov/ocimp.git"

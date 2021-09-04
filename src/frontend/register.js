@@ -1,10 +1,10 @@
-import is from './is';
-import singleton from './singleton';
-import log from './log';
-import load from './load';
-import listen from './listen';
+import is from '../is';
+import singleton from '../singleton';
+import log from '../log';
+import load from '../load';
+import listen from '../listen';
 
-export default function register( worker ) {
+export default function registerFrontend( worker ) {
 
     if ( singleton.registered ) {
 

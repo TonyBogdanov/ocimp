@@ -1,3 +1,3 @@
-import registerInWorker from './register-in-worker';
+import register from './backend/register';
 
-registerInWorker();
+register();

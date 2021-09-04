@@ -1,5 +1,5 @@
 import Worker from '../src/worker';
-import register from '../src/register';
+import register from '../src/frontend/register';
 
 document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
 
@@ -71,7 +71,7 @@ document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
 
     Object.entries( suite ).forEach( ( [ group, tests ] ) =>
         describe( group, () => Object.entries( tests ).forEach( ( [ name, run ] ) =>
-            it( name, async () => run( chai.assert ) ).timeout( 60000 ) ) ) );
+            it( name, async () => run( chai.assert ) ).timeout( 300000 ) ) ) );
 
     mocha.run();
 

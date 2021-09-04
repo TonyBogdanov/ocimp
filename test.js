@@ -223,7 +223,7 @@ async function wd( caps, callback ) {
 
             await batch( ( await capabilities() ).map( cap => async () => await wd( cap, async driver => {
 
-                await driver.manage().setTimeouts( { script: 60000, pageLoad: 60000, implicit: 60000 } );
+                await driver.manage().setTimeouts( { script: 300000, pageLoad: 300000, implicit: 300000 } );
                 await driver.get( 'http://localhost:8080' );
 
                 const { ok, stats } = await driver.executeAsyncScript(

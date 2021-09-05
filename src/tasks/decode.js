@@ -1,5 +1,6 @@
-import is from '../is';
-import run from '../frontend/run';
+import { runFrontend } from 'worker-relay';
+import is from 'worker-relay/src/is';
+import support from '../support';
 import createCanvas from '../util/create-canvas';
 
 const blobToImage = blob => new Promise( ( resolve, reject ) => {
@@ -31,9 +32,9 @@ export default async blob => {
 
     // To decode an image in the backend we need support for both ImageBitmap and OffscreenCanvas.
     // If this is not the case, temporarily switch to the frontend.
-    if ( is.backend && ( ! is.support.offscreenCanvas || ! is.support.imageBitmap ) ) {
+    if ( is.backend && ( ! support.offscreenCanvas || ! support.imageBitmap ) ) {
 
-        return run( 'decode', blob );
+        return runFrontend( 'decode', blob );
 
     }
 

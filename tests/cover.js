@@ -1,17 +1,17 @@
-import run from '../src/backend/run';
+import { runBackend } from 'worker-relay';
 import constant from '../src/constant';
 
 async function test( assert, flip, h, v ) {
 
     const input = await ( await fetch( `/a.png` ) ).blob();
-    const imageData = await run( 'decode', input );
+    const imageData = await runBackend( 'decode', input );
 
     const path = `/test.cover.${ flip ? v : h }.png`;
 
     const expected = await ( await fetch( path ) ).blob();
-    const expectedData = await run( 'decode', expected );
+    const expectedData = await runBackend( 'decode', expected );
 
-    const output = await run( 'cover', imageData, flip ? 25 : 5, flip ? 5 : 25, h, v );
+    const output = await runBackend( 'cover', imageData, flip ? 25 : 5, flip ? 5 : 25, h, v );
 
     assert.instanceOf( output, ImageData );
     assert.deepEqual( output, expectedData );

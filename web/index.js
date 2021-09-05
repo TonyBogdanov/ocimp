@@ -1,9 +1,11 @@
-import Worker from '../src/worker';
-import register from '../src/frontend/register';
+import Worker from './worker';
+import registerFrontend from '../src/register-frontend';
+import registerResolver from '../src/register-resolver';
 
 document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
 
-    register( new Worker() );
+    registerFrontend( new Worker() );
+    registerResolver();
 
     const suite = {};
     const context = require.context( '../tests', true, /\.js$/, 'lazy' );

@@ -1,8 +1,8 @@
-import is from '../is';
+import support from '../support';
 
 export default function createCanvas( { width, height } ) {
 
-    if ( is.support.offscreenCanvas ) {
+    if ( support.offscreenCanvas ) {
 
         return new OffscreenCanvas( width, height );
 

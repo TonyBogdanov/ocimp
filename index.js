@@ -1,7 +1,5 @@
-import registerFrontend from './src/frontend/register';
-import registerBackend from './src/backend/register';
-import runPingTest from './src/run-ping-test';
-import runBackend from './src/backend/run';
-import runFrontend from './src/frontend/run';
+import registerResolver from './src/register-resolver';
+import registerFrontend from './src/register-frontend';
+import registerBackend from './src/register-backend';
 
-export { registerFrontend, registerBackend, runPingTest, runBackend, runFrontend };
+export { registerResolver, registerFrontend, registerBackend };

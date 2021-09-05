@@ -1,12 +1,12 @@
-import run from '../src/backend/run';
+import { runBackend } from 'worker-relay';
 import constant from '../src/constant';
 
 async function test( assert, outside, mode ) {
 
     const input = await ( await fetch( `/a.png` ) ).blob();
-    const imageData = await run( 'decode', input );
+    const imageData = await runBackend( 'decode', input );
 
-    const output = await run( 'fit', imageData, 200, 200, outside, mode );
+    const output = await runBackend( 'fit', imageData, 200, 200, outside, mode );
 
     assert.instanceOf( output, ImageData );
     assert.equal( outside ? 356 : 200, output.width );

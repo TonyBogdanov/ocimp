@@ -1,5 +1,6 @@
-import is from '../is';
-import run from '../frontend/run';
+import { runFrontend } from 'worker-relay';
+import is from 'worker-relay/src/is';
+import support from '../support';
 import createCanvas from '../util/create-canvas';
 
 /**
@@ -14,9 +15,9 @@ export default async ( imageData, type = 'image/png', quality = 0.8 ) => {
 
     // To encode an image in the backend we need support for OffscreenCanvas.
     // If this is not the case, temporarily switch to the frontend.
-    if ( is.backend && ! is.support.offscreenCanvas ) {
+    if ( is.backend && ! support.offscreenCanvas ) {
 
-        return run( 'encode', imageData, type, quality );
+        return runFrontend( 'encode', imageData, type, quality );
 
     }
 
@@ -24,7 +25,7 @@ export default async ( imageData, type = 'image/png', quality = 0.8 ) => {
     const context = canvas.getContext( '2d' );
 
     context.putImageData( imageData, 0, 0 );
-    if ( is.support.offscreenCanvas && canvas instanceof OffscreenCanvas ) {
+    if ( support.offscreenCanvas && canvas instanceof OffscreenCanvas ) {
 
         const name = canvas.convertToBlob ? 'convertToBlob' : 'toBlob'; // Firefox uses toBlob.
         return await canvas[ name ]( { type, quality } );

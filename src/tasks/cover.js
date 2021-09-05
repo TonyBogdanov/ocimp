@@ -1,5 +1,5 @@
+import { runBackend } from 'worker-relay';
 import constant from '../constant';
-import run from '../backend/run';
 
 export default async (
 
@@ -28,7 +28,7 @@ export default async (
     }
     /* debug:stop */
 
-    const scaled = await run( 'fit', imageData, fitWidth, fitHeight, true, resizeMode );
+    const scaled = await runBackend( 'fit', imageData, fitWidth, fitHeight, true, resizeMode );
 
     const x = hAlign === constant.ALIGN_CENTER ? Math.round( ( scaled.width - fitWidth ) / 2 ) :
         hAlign === constant.ALIGN_RIGHT ? scaled.width - fitWidth : 0;
@@ -36,6 +36,6 @@ export default async (
     const y = vAlign === constant.ALIGN_MIDDLE ? Math.round( ( scaled.height - fitHeight ) / 2 ) :
         vAlign === constant.ALIGN_BOTTOM ? scaled.height - fitHeight : 0;
 
-    return await run( 'crop', scaled, x, y, fitWidth, fitHeight );
+    return await runBackend( 'crop', scaled, x, y, fitWidth, fitHeight );
 
 };

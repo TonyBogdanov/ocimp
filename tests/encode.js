@@ -1,11 +1,11 @@
-import run from '../src/backend/run';
+import { runBackend } from 'worker-relay';
 
 async function test( assert, ext, mime ) {
 
     const input = await ( await fetch( `/a.${ ext }` ) ).blob();
-    const imageData = await run( 'decode', input );
+    const imageData = await runBackend( 'decode', input );
 
-    const output = await run( 'encode', imageData, mime );
+    const output = await runBackend( 'encode', imageData, mime );
 
     assert.instanceOf( output, Blob );
     assert.equal( mime, output.type );

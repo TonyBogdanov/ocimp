@@ -1,5 +1,5 @@
+import { runBackend } from 'worker-relay';
 import constant from '../constant';
-import run from '../backend/run';
 
 /**
  * Scales the specified ImageData to the target "fit" dimensions.
@@ -28,6 +28,6 @@ export default async ( imageData, fitWidth, fitHeight, outside = false, resizeMo
 
     }
 
-    return await run( 'resize', imageData, width, height, resizeMode );
+    return await runBackend( 'resize', imageData, width, height, resizeMode );
 
 };

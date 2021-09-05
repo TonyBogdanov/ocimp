@@ -33,7 +33,7 @@ export default async blob => {
     // If this is not the case, temporarily switch to the frontend.
     if ( is.backend && ( ! support.offscreenCanvas || ! support.imageBitmap ) ) {
 
-        return runFrontend( 'decode', blob );
+        return runFrontend( 'ocimp.decode', blob );
 
     }
 

@@ -16,7 +16,7 @@ export default async ( imageData, type = 'image/png', quality = 0.8 ) => {
     // If this is not the case, temporarily switch to the frontend.
     if ( is.backend && ! support.offscreenCanvas ) {
 
-        return runFrontend( 'encode', imageData, type, quality );
+        return runFrontend( 'ocimp.encode', imageData, type, quality );
 
     }
 

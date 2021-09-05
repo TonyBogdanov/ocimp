@@ -28,6 +28,6 @@ export default async ( imageData, fitWidth, fitHeight, outside = false, resizeMo
 
     }
 
-    return await runBackend( 'resize', imageData, width, height, resizeMode );
+    return await runBackend( 'ocimp.resize', imageData, width, height, resizeMode );
 
 };

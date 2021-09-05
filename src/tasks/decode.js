@@ -1,5 +1,4 @@
-import { runFrontend } from 'worker-relay';
-import is from 'worker-relay/src/is';
+import { is, runFrontend } from 'worker-relay';
 import support from '../support';
 import createCanvas from '../util/create-canvas';
 

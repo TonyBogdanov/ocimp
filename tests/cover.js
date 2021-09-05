@@ -4,14 +4,14 @@ import constant from '../src/constant';
 async function test( assert, flip, h, v ) {
 
     const input = await ( await fetch( `/a.png` ) ).blob();
-    const imageData = await runBackend( 'decode', input );
+    const imageData = await runBackend( 'ocimp.decode', input );
 
     const path = `/test.cover.${ flip ? v : h }.png`;
 
     const expected = await ( await fetch( path ) ).blob();
-    const expectedData = await runBackend( 'decode', expected );
+    const expectedData = await runBackend( 'ocimp.decode', expected );
 
-    const output = await runBackend( 'cover', imageData, flip ? 25 : 5, flip ? 5 : 25, h, v );
+    const output = await runBackend( 'ocimp.cover', imageData, flip ? 25 : 5, flip ? 5 : 25, h, v );
 
     assert.instanceOf( output, ImageData );
     assert.deepEqual( output, expectedData );

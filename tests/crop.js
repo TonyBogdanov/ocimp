@@ -3,14 +3,14 @@ import { runBackend } from 'worker-relay';
 async function test( assert, x, y, w, h ) {
 
     const input = await ( await fetch( `/a.png` ) ).blob();
-    const imageData = await runBackend( 'decode', input );
+    const imageData = await runBackend( 'ocimp.decode', input );
 
     const path = `/test.crop.${ x }.${ y }.${ null === w ? 'n' : w }.${ null === h ? 'n' : h }.png`;
 
     const expected = await ( await fetch( path ) ).blob();
-    const expectedData = await runBackend( 'decode', expected );
+    const expectedData = await runBackend( 'ocimp.decode', expected );
 
-    const output = await runBackend( 'crop', imageData, x, y, w, h );
+    const output = await runBackend( 'ocimp.crop', imageData, x, y, w, h );
 
     assert.instanceOf( output, ImageData );
     assert.deepEqual( output, expectedData );

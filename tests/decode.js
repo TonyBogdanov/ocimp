@@ -3,7 +3,7 @@ import { runBackend } from 'worker-relay';
 async function test( assert, ext ) {
 
     const blob = await ( await fetch( `/a.${ ext }` ) ).blob();
-    const imageData = await runBackend( 'decode', blob );
+    const imageData = await runBackend( 'ocimp.decode', blob );
 
     assert.instanceOf( imageData, ImageData );
 

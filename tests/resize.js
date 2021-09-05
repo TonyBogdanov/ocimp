@@ -4,9 +4,9 @@ import constant from '../src/constant';
 async function test( assert, mode ) {
 
     const input = await ( await fetch( `/a.png` ) ).blob();
-    const imageData = await runBackend( 'decode', input );
+    const imageData = await runBackend( 'ocimp.decode', input );
 
-    const output = await runBackend( 'resize', imageData, 320, 240, mode );
+    const output = await runBackend( 'ocimp.resize', imageData, 320, 240, mode );
 
     assert.instanceOf( output, ImageData );
     assert.equal( 320, output.width );

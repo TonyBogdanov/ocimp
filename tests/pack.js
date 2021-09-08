@@ -11,11 +11,12 @@ async function test( assert, ext, mime ) {
     const output = await runBackend( 'ocimp.encode', imageData, mime );
     const file = await runBackend( 'ocimp.pack', output, name, lastModified );
 
-    assert.instanceOf( file, File );
+    assert.equal( 'File', file.constructor.name );
 
     assert.equal( mime, file.type );
     assert.equal( name, file.name );
-    assert.equal( lastModified, file.lastModified );
+
+    // Not testing lastModified because Safari ignores it.
 
 }
 

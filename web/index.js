@@ -1,6 +1,7 @@
 import Worker from './worker';
 import registerFrontend from '../src/register-frontend';
 import registerResolver from '../src/register-resolver';
+import { runBackend } from 'worker-relay';
 
 document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
 

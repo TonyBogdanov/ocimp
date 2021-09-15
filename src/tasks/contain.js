@@ -2,7 +2,7 @@ import { runBackend } from 'worker-relay';
 import constant from '../constant';
 
 /**
- * Resizes the specified image to "fit-outside" the specified fit width & height.
+ * Resizes the specified image to "fit-inside" the specified fit width & height.
  *
  * @param imageData
  * @param fitWidth
@@ -39,7 +39,7 @@ export default async (
     }
     /* debug:stop */
 
-    const scaled = await runBackend( 'ocimp.fit', imageData, fitWidth, fitHeight, true, resizeMode );
+    const scaled = await runBackend( 'ocimp.fit', imageData, fitWidth, fitHeight, false, resizeMode );
 
     const x = hAlign === constant.ALIGN_CENTER ? Math.round( ( scaled.width - fitWidth ) / 2 ) :
         hAlign === constant.ALIGN_RIGHT ? scaled.width - fitWidth : 0;

@@ -16,7 +16,7 @@ document.addEventListener( 'DOMContentLoaded', () => setTimeout( async () => {
         const rel = path.replace( /^[.\/]+/, '' );
         const group = rel.substr( 0, rel.length - 3 );
 
-        suite[ group ] = ( await import( `../tests/${ rel }` ) ).default;
+        suite[ group ] = ( await import( /* @vite-ignore */ `../tests/${ rel }` ) ).default;
 
     }
 

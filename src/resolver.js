@@ -12,8 +12,8 @@ export default function resolver( name ) {
             const rel = path.replace( /^[.\/]+/, '' );
             const name = rel.replace( /\.js$/, '' );
 
-            tasks[ `ocimp.${ name }` ] = async ( ... args ) => ( await import( `./tasks/${ rel }` ) ).default(
-                ... args );
+            tasks[ `ocimp.${ name }` ] = async ( ... args ) =>
+                ( await import( /* @vite-ignore */ `./tasks/${ rel }` ) ).default( ... args );
 
         } );
 

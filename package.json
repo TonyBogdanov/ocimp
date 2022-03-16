@@ -1,6 +1,6 @@
 {
   "name": "ocimp",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Off-Canvas Image Processing",
   "main": "index.js",
   "repository": {

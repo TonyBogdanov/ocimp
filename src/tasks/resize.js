@@ -1,4 +1,4 @@
-import resize2 from '@jimp/plugin-resize/es/modules/resize2';
+import resize2 from '@jimp/plugin-resize/src/modules/resize2';
 import constant from '../constant';
 import mutableImageData from '../util/mutable-image-data';
 

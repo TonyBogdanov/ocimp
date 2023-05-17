@@ -8,36 +8,38 @@ const copy = require( 'recursive-copy' );
 const rimraf = require( 'rimraf' );
 const getCapabilities = require( 'browserslist-browserstack' ).default;
 
+const username = env( 'BROWSERSTACK_USERNAME' );
+const accessKey = env( 'BROWSERSTACK_ACCESS_KEY' );
+
+function env( name ) {
+    if ( !process.env.hasOwnProperty( name ) ) {
+        throw new Error( `Missing environment variable: ${ name }` );
+    }
+
+    return process.env[ name ];
+}
+
 function batch( queue ) {
-
     return new Promise( ( resolve, reject ) => {
-
         let active = 0,
             finished = false,
             results = [],
             error = undefined;
 
         const go = () => {
-
             if ( 5 <= active ) {
-
                 return;
-
             }
 
             if ( 0 === queue.length ) {
-
                 if ( finished || 0 < active ) {
-
                     return;
-
                 }
 
                 finished = true;
                 'undefined' !== typeof error ? reject( error ) : resolve( results );
 
                 return;
-
             }
 
             active++;
@@ -47,37 +49,31 @@ function batch( queue ) {
                 .finally( () => { active--; go(); } );
 
             go();
-
         };
 
         go();
-
     } );
-
 }
 
 async function capabilities() {
     console.log( 'Resolving browser capabilities.' );
+    const caps = await getCapabilities( { username, accessKey } );
+
     const candidates = { min: {}, max: {} };
-
-    const caps = await getCapabilities( {
-        username: process.env.BROWSERSTACK_USERNAME,
-        accessKey: process.env.BROWSERSTACK_ACCESS_KEY,
-    } );
-
     for ( const cap of caps ) {
-        if ( ! candidates.min.hasOwnProperty( cap.browserName ) ||
+        if ( !candidates.min.hasOwnProperty( cap.browserName ) ||
             0 < compare( candidates.min[ cap.browserName ].browserVersion, cap.browserVersion ) ) {
             candidates.min[ cap.browserName ] = cap;
         }
 
-        if ( ! candidates.max.hasOwnProperty( cap.browserName ) ||
+        if ( !candidates.max.hasOwnProperty( cap.browserName ) ||
             0 > compare( candidates.max[ cap.browserName ].browserVersion, cap.browserVersion ) ) {
             candidates.max[ cap.browserName ] = cap;
         }
     }
 
-    return Object.values( candidates.min ).concat( Object.values( candidates.max ) )
+    return Object.values( candidates.min )
+        .concat( Object.values( candidates.max ) )
         .filter( ( v, i, a ) => a.indexOf( v ) === i );
 }
 
@@ -131,8 +127,7 @@ async function bs( callback ) {
 
     return new Promise( async ( resolve, reject ) => {
         const bs = new browserstack.Local();
-
-        bs.start( { forceLocal: true }, async e => {
+        bs.start( { forceLocal: true, key: accessKey }, async e => {
             if ( e ) {
                 return reject( e );
             }
@@ -149,28 +144,33 @@ async function bs( callback ) {
     } );
 }
 
-async function wd( caps, callback ) {
-    console.debug( `Starting ${ caps.browserName }@${ caps.browserVersion }.` );
-
-    const p = new webdriver.Builder()
+async function wd( cap, callback ) {
+    let builder = new webdriver.Builder()
+        .forBrowser( cap.browserName )
         .usingServer( 'https://hub-cloud.browserstack.com/wd/hub' )
-        .withCapabilities( Object.assign( {
+        .withCapabilities( {
+            browserName: cap.browserName,
+            'bstack:options': {
+                userName: username,
+                accessKey: accessKey,
+                buildName: 'ocimp',
+                projectName: 'ocimp',
+                sessionName: 'ocimp',
+                os: cap.os,
+                osVersion: cap.os_version,
+                browserVersion: cap.browser_version,
+                debug: true,
+                local: true,
+            },
+        } );
 
-            'browserstack.user': process.env.BROWSERSTACK_USERNAME,
-            'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY,
-            'build': 'ocimp',
-            'name': 'ocimp',
-            'browserstack.debug': 'true',
-            'browserstack.console': 'errors',
-            'browserstack.local': true,
+    console.debug( `Starting ${ cap.browserName }@${ cap.browserVersion }.` );
+    const driver = builder.build();
 
-        }, caps ) )
-        .build();
+    const [ result, error ] = await invoke( () => callback( driver ) );
 
-    const [ result, error ] = await invoke( () => callback( p ) );
-
-    console.debug( `Stopping ${ caps.browserName }@${ caps.browserVersion }.` );
-    await p.quit();
+    console.debug( `Stopping ${ cap.browserName }@${ cap.browserVersion }.` );
+    await driver.quit();
 
     if ( error ) {
         throw error;

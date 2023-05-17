@@ -1,6 +1,6 @@
 {
   "name": "ocimp",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Off-Canvas Image Processing",
   "main": "index.js",
   "repository": {
@@ -12,6 +12,10 @@
   "browserslist": [
     "since 2017 and not edge < 79"
   ],
+  "files": [
+    "index.js",
+    "src/"
+  ],
   "scripts": {
     "webpack": "webpack serve --progress --mode=development --stats-children",
     "build": "webpack-cli --progress --mode=production --stats-children",
@@ -19,7 +23,7 @@
   },
   "dependencies": {
     "jimp": "^0.22.7",
-    "worker-relay": "^1.1.2"
+    "worker-relay": "^1.1.3"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",

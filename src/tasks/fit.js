@@ -17,17 +17,13 @@ import constant from '../constant';
  * @returns {Promise<*>}
  */
 export default async ( imageData, fitWidth, fitHeight, outside = false, resizeMode = constant.RESIZE_BILINEAR ) => {
-
     let width = fitWidth;
     let height = Math.round( width * imageData.height / imageData.width );
 
     if ( ( height < fitHeight && outside ) || ( height > fitHeight && ! outside ) ) {
-
         height = fitHeight;
         width = Math.round( height * imageData.width / imageData.height );
-
     }
 
     return await runBackend( 'ocimp.resize', imageData, width, height, resizeMode );
-
 };

@@ -2,7 +2,6 @@ import { runBackend } from 'worker-relay';
 import constant from '../src/constant';
 
 async function test( assert, outside, mode ) {
-
     const input = await ( await fetch( `/a.png` ) ).blob();
     const imageData = await runBackend( 'ocimp.decode', input );
 
@@ -12,7 +11,6 @@ async function test( assert, outside, mode ) {
     assert.equal( outside ? 356 : 200, output.width );
     assert.equal( outside ? 200 : 113, output.height );
     assert.lengthOf( output.data, outside ? 284800 : 90400 );
-
 }
 
 const tests = {};

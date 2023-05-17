@@ -1,7 +1,6 @@
 import { runBackend } from 'worker-relay';
 
 async function test( assert, ext, mime ) {
-
     const input = await ( await fetch( `/a.${ ext }` ) ).blob();
     const imageData = await runBackend( 'ocimp.decode', input );
 
@@ -12,12 +11,9 @@ async function test( assert, ext, mime ) {
 
     assert.isString( uri );
     assert.equal( `data:${ mime };base64,`, uri.substr( 0, mime.length + 13 ) );
-
 }
 
 export default {
-
     'Should uri-fy blob(jpeg).': async assert => test( assert, 'jpg', 'image/jpeg' ),
     'Should uri-fy blob(png).': async assert => test( assert, 'png', 'image/png' ),
-
 };

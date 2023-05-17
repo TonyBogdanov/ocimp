@@ -15,15 +15,12 @@
  * @returns {Promise<ImageData>}
  */
 export default async ( imageData, x, y, width = null, height = null ) => {
-
     width = null === width ? imageData.width - x : width;
     height = null === height ? imageData.height - y : height;
 
     const result = new ImageData( width, height );
     for ( let dy = 0; dy < height; dy++ ) {
-
         for ( let dx = 0; dx < width; dx++ ) {
-
             const sx = x + dx;
             const sy = y + dy;
 
@@ -31,25 +28,20 @@ export default async ( imageData, x, y, width = null, height = null ) => {
             const di = 4 * ( dy * width + dx );
 
             if ( sx < 0 || sy < 0 || sx >= imageData.width || sy >= imageData.height ) {
-
                 result.data[ di ]     = 0;
                 result.data[ di + 1 ] = 0;
                 result.data[ di + 2 ] = 0;
                 result.data[ di + 3 ] = 0;
 
                 continue;
-
             }
 
             result.data[ di ]     = imageData.data[ si ];
             result.data[ di + 1 ] = imageData.data[ si + 1 ];
             result.data[ di + 2 ] = imageData.data[ si + 2 ];
             result.data[ di + 3 ] = imageData.data[ si + 3 ];
-
         }
-
     }
 
     return result;
-
 };

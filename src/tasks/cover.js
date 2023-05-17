@@ -13,29 +13,22 @@ import constant from '../constant';
  * @returns {Promise<*>}
  */
 export default async (
-
     imageData,
     fitWidth,
     fitHeight,
     hAlign = constant.ALIGN_CENTER,
     vAlign = constant.ALIGN_MIDDLE,
     resizeMode = constant.RESIZE_BILINEAR
-
 ) => {
-
     /* debug:start */
     if ( -1 === constant.HORIZONTAL_ALIGNS.indexOf( hAlign ) ) {
-
         throw `Invalid cover horizontal align mode: ${ hAlign }, valid modes are: ${
             constant.HORIZONTAL_ALIGNS.join( ', ' ) }.`;
-
     }
 
     if ( -1 === constant.VERTICAL_ALIGNS.indexOf( vAlign ) ) {
-
         throw `Invalid cover vertical align mode: ${ vAlign }, valid modes are: ${
             constant.VERTICAL_ALIGNS.join( ', ' ) }.`;
-
     }
     /* debug:stop */
 
@@ -48,5 +41,4 @@ export default async (
         vAlign === constant.ALIGN_BOTTOM ? scaled.height - fitHeight : 0;
 
     return await runBackend( 'ocimp.crop', scaled, x, y, fitWidth, fitHeight );
-
 };

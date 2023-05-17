@@ -12,12 +12,9 @@ import mutableImageData from '../util/mutable-image-data';
  * @returns {Promise<ImageData>}
  */
 export default async ( imageData, width, height, mode = constant.RESIZE_BILINEAR ) => {
-
     /* debug:start */
     if ( -1 === constant.RESIZE_MODES.indexOf( mode ) ) {
-
         throw `Invalid resize mode: ${ mode }, valid modes are: ${ constant.RESIZE_MODES.join( ', ' ) }.`;
-
     }
     /* debug:stop */
 
@@ -25,5 +22,4 @@ export default async ( imageData, width, height, mode = constant.RESIZE_BILINEAR
     resize2[ mode ]( imageData, result );
 
     return result.toImageData();
-
 };

@@ -2,7 +2,6 @@ import { runBackend } from 'worker-relay';
 import constant from '../src/constant';
 
 async function test( assert, flip, h, v ) {
-
     const input = await ( await fetch( `/a.png` ) ).blob();
     const imageData = await runBackend( 'ocimp.decode', input );
 
@@ -15,7 +14,6 @@ async function test( assert, flip, h, v ) {
 
     assert.instanceOf( output, ImageData );
     assert.deepEqual( output, expectedData );
-
 }
 
 const tests = {};

@@ -1,5 +1,4 @@
 const constant = {
-
     RESIZE_NEAREST_NEIGHBOR: 'nearestNeighbor',
     RESIZE_BILINEAR: 'bilinearInterpolation',
     RESIZE_BICUBIC: 'bicubicInterpolation',
@@ -13,17 +12,14 @@ const constant = {
     ALIGN_TOP: 'top',
     ALIGN_MIDDLE: 'middle',
     ALIGN_BOTTOM: 'bottom',
-
 };
 
 constant.RESIZE_MODES = [
-
     constant.RESIZE_NEAREST_NEIGHBOR,
     constant.RESIZE_BILINEAR,
     constant.RESIZE_BICUBIC,
     constant.RESIZE_HERMITE,
     constant.RESIZE_BEZIER,
-
 ];
 
 constant.HORIZONTAL_ALIGNS = [ constant.ALIGN_LEFT, constant.ALIGN_CENTER, constant.ALIGN_RIGHT ];

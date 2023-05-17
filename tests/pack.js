@@ -1,7 +1,6 @@
 import { runBackend } from 'worker-relay';
 
 async function test( assert, ext, mime ) {
-
     const name = `file.${ ext }`;
     const lastModified = Date.now();
 
@@ -17,12 +16,9 @@ async function test( assert, ext, mime ) {
     assert.equal( name, file.name );
 
     // Not testing lastModified because Safari ignores it.
-
 }
 
 export default {
-
     'Should pack blob(jpeg).': async assert => test( assert, 'jpg', 'image/jpeg' ),
     'Should pack blob(png).': async assert => test( assert, 'png', 'image/png' ),
-
 };
